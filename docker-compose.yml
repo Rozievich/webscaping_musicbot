@@ -1,0 +1,29 @@
+version: "3.8"
+
+services:
+  bot:
+    build: .
+    restart: always
+    working_dir: /apps
+    container_name: music_bot
+    environment:
+      DB_HOST: pg
+      DB_PORT: 5432
+      DB_PASS: 11
+    env_file:
+      - .env
+    command: python main.py
+    depends_on:
+      - pg
+  pg:
+    image: postgres:14.1-alpine
+    restart: always
+    container_name: my_postgres
+    environment:
+      POSTGRES_PASSWORD: 11
+    volumes:
+      - db_data:/var/lib/postgresql/data/
+    ports:
+      - "5432:5432"
+volumes:
+  db_data:
